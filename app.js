@@ -14,17 +14,17 @@ var users = require('./routes/users');
 
 var app = express();
 
-app.use(function(req,res,next){
-  res.locals.user=req.session.user;
-
-  var err = req.flash('error');
-  var success = req.flash('success');
-
-  res.locals.error = err.length ? err : null;
-  res.locals.success = success.length ? success : null;
-   
-  next();
-});
+//app.use(function(req,res,next){
+//res.locals.user=req.session.user;
+//
+//var err = req.flash('error');
+//var success = req.flash('success');
+//
+//res.locals.error = err.length ? err : null;
+//res.locals.success = success.length ? success : null;
+// 
+//next();
+//});
 
 // view engine setup
 app.engine('html',ejs.__express); 
