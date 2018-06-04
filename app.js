@@ -10,20 +10,19 @@ var MongoStore = require('connect-mongo')(session);
 var settings = require('./settings');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
 //app.use(function(req,res,next){
-//res.locals.user=req.session.user;
-//
-//var err = req.flash('error');
-//var success = req.flash('success');
-//
-//res.locals.error = err.length ? err : null;
-//res.locals.success = success.length ? success : null;
-// 
-//next();
+//	res.locals.user=req.session.user;
+//	
+//	var err = req.flash('error');
+//	var success = req.flash('success');
+//	
+//	res.locals.error = err.length ? err : null;
+//	res.locals.success = success.length ? success : null;
+//	   
+//	next();
 //});
 
 // view engine setup
@@ -40,6 +39,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
+app.use('/', routes);
+
 app.use(session({
 	secret: settings.cookieSecret,
 	store: new MongoStore({
@@ -47,9 +48,6 @@ app.use(session({
 		url: 'mongodb://localhost/blog'
 	})
 }));
-
-app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

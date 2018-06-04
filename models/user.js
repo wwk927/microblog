@@ -1,10 +1,9 @@
-var mongdb = require('./db');
+var mongodb = require('./db');
 
 function User(user) {
 	this.name = user.name;
 	this.password = user.password;
 }
-module.exports = User;
 
 User.prototype.save = function save(callback) {
 	//存入Mongdb的文档
@@ -41,12 +40,12 @@ User.get = function get(username, callback) {
 		//读取 users 集合
 		db.collection('user',function(err, collection) {
 			if (err) {
-				mongdb.close();
+				mongodb.close();
 				return callback(err);
 			}
 			// 查找 name 属性为 username 的文档
 			collection.findOne({name: username}, function(err, doc) {
-				mongdb.close();
+				mongodb.close();
 				if (doc) {
 					// 封装文档为User 对象
 					var user = new User(doc);
@@ -58,3 +57,5 @@ User.get = function get(username, callback) {
 		})	
 	})
 }
+
+module.exports = User;

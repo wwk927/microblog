@@ -1,44 +1,39 @@
 var express = require('express');
 var router = express.Router();
+var crypto = require('crypto');
+var User = require('../models/user');
 
-router.post('/reg', function(req, res) {
-	console.log(req.body.username,req.body['password-repeat'],req.body['password']);
+router.post('/register', function(req, res) {
 	//检验用户两次输入的密码是否一致
-	if (req.body['password-repeat'] != req.body['password']) {
-	//	req.flash('error','两次输入的密码不一致');
-		console.log('error','两次输入的密码不一致');
-		return res.redirect('/reg');
-	}
-//
-////生成密码的散列值
-//var md5 = crypto.createHash('md5');
-//var password = md5.update(req.body.password).digest('base64');
-//
-//	var newUser = new User({
-//		name: req.body.username,
-//		password:paswword
-//	})
-//	
-//	User.get(newUser.name, function(err, user) {
-//		if (user) {
-//			err = '用户名已存在。'
-//		}
-//		if (err) {
-//			req.flash('error', err);
-//			return res.redirect('/reg');
-//		}
-//		//如果不存在则新增用户
-//		newUser.save(function(err){
-//			if (err) {
-//				req.flash('error', err);
-//				return res.redirect('/reg');
-//			}			
-//			req.session.user = newUser;
-//			req.flash('success','注册成功');
-//			res.redirect('/');
-//		})
-//	})
+	if (req.body['password_repeat'] != req.body['password']) {
+		res.json({error:'两次输入的密码不一致'})
+	}else{
+		//生成密码的散列值
+		var md5 = crypto.createHash('md5');
+		var password = md5.update(req.body.password).digest('base64');
 	
+		var newUser = new User({
+			name: req.body.username,
+			password:req.body.password
+		})
+		
+		console.log(User);
+		
+		User.get(newUser.name, function(err, user) {
+			if (user) {
+				err = '用户名已存在。'
+			}
+			if (err) {
+				res.json({error:err});
+				return false;
+			}
+			//如果不存在则新增用户
+			newUser.save(function(err){		
+				req.session.user = newUser;
+				res.json({success:'注册成功'})
+			})
+		})
+	}
 });
 
 /* GET home page. */
