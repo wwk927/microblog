@@ -5,14 +5,14 @@
 		<title>登录</title>
 	</head>
 	<body>
-		<form class="control-group" method="post">
+		<form class="control-group">
 			<fieldset>
 				<legend>用户登录</legend>
 				<div class="control-group">
 					<label class="control-label" for="username">用户名</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" id="username" name="username"/>
-						<p class="help-block">你的账户名称、用于登录和显示。</p>
+						<p class="help-block"></p>
 					</div>
 				</div>
 				<div class="control-group">
@@ -22,9 +22,33 @@
 					</div>
 				</div>	
 				<div class="form-actions">
-					<button type="submit" class="btn btn-primary">登录</button>
+					<button type="button" class="btn btn-primary">登录</button>
 				</div>
 			</fieldset>
 		</form>
+		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("button").click(function(){
+					console.log($("form").serialize());
+					$.ajax({
+					    type: 'post',
+					    url: '/login',
+					    data: $("form").serialize(),
+					    success: function(data) {
+					    	console.log(data.returnCode);
+					    	if (data.returnCode != 0){
+					    		$(".help-block").text(data.returnInfo);					    		
+					    	}else{
+					    		window.location.href = '/'
+					    	}
+					    },
+					    error: function(){
+					    	console.log("请求失败")
+					    }
+					});					
+				})				
+			})
+		</script>				
 	</body>
 </html>

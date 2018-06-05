@@ -2,9 +2,9 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-var bodyParser = require('body-parser');
 var ejs = require('ejs'); 
 var MongoStore = require('connect-mongo')(session);
 var settings = require('./settings');
@@ -39,8 +39,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 
-app.use('/', routes);
-
 app.use(session({
 	secret: settings.cookieSecret,
 	store: new MongoStore({
@@ -48,6 +46,9 @@ app.use(session({
 		url: 'mongodb://localhost/blog'
 	})
 }));
+
+app.use('/', routes);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

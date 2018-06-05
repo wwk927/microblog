@@ -44,7 +44,7 @@
 					    url: '/register',
 					    data: $("form").serialize(),
 					    success: function(data) {
-					        console.log(data);
+					        $(".help-block").text(data.error);
 					    }
 					});					
 				})				

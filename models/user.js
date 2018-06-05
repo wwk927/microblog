@@ -18,14 +18,14 @@ User.prototype.save = function save(callback) {
 		//读取 users 集合
 		db.collection('user',function(err, collection) {
 			if (err) {
-				mongdb.close();
+				mongodb.close();
 				return callback(err);
 			}
 			//为 name 属性添加索引
 			collection.ensureIndex('name', {unique:true});
 			//写入 user 文档
 			collection.insert(user, {safe: true}, function(err, user){
-				mongdb.close();
+				mongodb.close();
 				callback(err,user);
 			})
 		})
