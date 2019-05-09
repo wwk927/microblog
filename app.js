@@ -44,7 +44,9 @@ app.use(session({
 	store: new MongoStore({
 		db: settings.db,
 		url: 'mongodb://localhost/blog'
-	})
+	}),
+	resave: true,
+	saveUninitialized: true
 }));
 
 app.use('/', routes);
@@ -65,10 +67,10 @@ if (app.get('env') === 'development') {
 	app.use(function(err, req, res, next) {
 		if(req.url !== "/favicon.ico") {
 			res.status(err.status || 500);
-			res.render('error', {
-				message: err.message,
-				error: err
-			});
+			res.json({
+				errorCode: '201',
+				message: err.message
+			})	
 		}
 		else {
 			res.end();
@@ -80,13 +82,13 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+// app.use(function(err, req, res, next) {
+//   res.status(err.status || 500);
+//   res.render('error', {
+//     message: err.message,
+//     error: {}
+//   });
+// });
 
 
 module.exports = app;

@@ -53,10 +53,13 @@ router.post('/login', function(req, res) {
 	});
 });
 
+router.get('/userInfo', function(req, res) {
+	res.json({returnCode:'0',returnInfo:{name:req.session.user.name}});
+});
+
 /* GET home page. */
 router.get('/', function(req, res) {
   res.render('index', { title: '首页' });
-  console.log(req.session.user);
 });
 
 router.get('/reg', function(req, res) {
@@ -70,5 +73,21 @@ router.get('/login', function(req, res) {
 router.get('/user/:username', function(req, res) {
   res.send('user:'+req.params.username);
 });
+
+function checkLogin(req, res, next) {
+	if(!req.session.user) {
+//		req.flash('error', '未登入');
+		return res.redirect('/login');
+	}
+	next();
+}
+
+function checkNotLogin(req, res, next) {
+	if(req.session.user) {
+//		req.flash('error', '已登入');
+		return res.redirect('/');
+	}
+	next();
+}
 
 module.exports = router;

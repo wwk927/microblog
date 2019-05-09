@@ -18,7 +18,17 @@
 		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-
+			$.ajax({
+				type: 'get',
+				url: '/userInfo',
+				data: 1,
+				success: function(data) {
+					console.log(data);
+				},
+				error: function(){
+					console.log("请求失败")
+				}
+			});	
 		</script>
 	</body>
 </html>

@@ -44,7 +44,11 @@
 					    url: '/register',
 					    data: $("form").serialize(),
 					    success: function(data) {
-					        $(".help-block").text(data.error);
+					    	 if (data.error){
+					    	 	$(".help-block").text(data.error);				    	 	
+					    	 }else{
+					    	 	window.location.href="/";				    	 	
+					    	 }
 					    }
 					});					
 				})				
