@@ -8,12 +8,12 @@
 		<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="/css/style.css"/>
 		<div class="hero-unit">
-			<h1>欢迎来到Microblog</h1>
+			<h2><span id="userName"></span>,欢迎来到Microblog</h2>
 			<p>Microblog 是一个基于node.js的微博系统。</p>
-			<p> 
+			<!-- <p> 
 				<a class="btn btn-primary btn-large" href="/login">登录</a>
 				<a class="btn btn-primary btn-large" href="/reg">注册</a>
-			</p>
+			</p> -->
 		</div>
 		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
@@ -23,10 +23,10 @@
 				url: '/userInfo',
 				data: 1,
 				success: function(data) {
-					console.log(data);
+					$("#userName").text(data.returnInfo.name);
 				},
 				error: function(){
-					console.log("请求失败")
+					window.location.href="/login";
 				}
 			});	
 		</script>

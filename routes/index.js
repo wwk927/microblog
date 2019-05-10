@@ -54,7 +54,11 @@ router.post('/login', function(req, res) {
 });
 
 router.get('/userInfo', function(req, res) {
-	res.json({returnCode:'0',returnInfo:{name:req.session.user.name}});
+	if (req.session.user) {
+		res.json({returnCode:'1',returnInfo:"未登录"});
+	}else{
+		res.json({returnCode:'0',returnInfo:{name:req.session.user.name}});
+	}
 });
 
 /* GET home page. */
