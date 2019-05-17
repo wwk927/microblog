@@ -10,25 +10,59 @@
 		<div class="hero-unit">
 			<h2><span id="userName"></span>,欢迎来到Microblog</h2>
 			<p>Microblog 是一个基于node.js的微博系统。</p>
-			<!-- <p> 
-				<a class="btn btn-primary btn-large" href="/login">登录</a>
-				<a class="btn btn-primary btn-large" href="/reg">注册</a>
-			</p> -->
 		</div>
+		<div class="edit-section">
+			<input type="text" id="blog" name="blog"/>
+			<button id="submit">发布</button>
+		</div>
+		<ul class="blog-list"></ul>
 		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			$.ajax({
 				type: 'get',
 				url: '/userInfo',
-				data: 1,
 				success: function(data) {
-					$("#userName").text(data.returnInfo.name);
+					if (data.returnCode == 0){
+						$("#userName").text(data.returnInfo.name);				
+					}else{
+						window.location.href="/login";
+					}
 				},
-				error: function(){
-					window.location.href="/login";
-				}
-			});	
+			});
+			$.ajax({
+				type: 'get',
+				url: '/blogList',
+				success: function(data) {
+					console.log(data);
+					var blogList = '';
+					if (data.returnCode == 0){
+						data.returnInfo.forEach(item => {
+							blogList += "<li>"+item.userName+"："+item.content+"</br>"+item.time+"</li>";
+						});
+						$(".blog-list").html(blogList);				
+					}else{
+
+					}
+				},
+			});					
+			$("#submit").click(function(){
+				console.log($("#blog").val());
+				$.ajax({
+					type: 'post',
+					url: '/publish',
+					data: {
+						content: $("#blog").val(),
+					},
+					success: function(data) {
+						if (data.returnCode == 0){
+							window.location.href="/";						
+						}else{
+							alert(data.returnInfo);
+						}
+					},
+				});				
+			})
 		</script>
 	</body>
 </html>

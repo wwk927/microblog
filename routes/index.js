@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var User = require('../models/user');
+var Blog = require('../models/blog');
 
 router.post('/register', function(req, res) {
 	//检验用户两次输入的密码是否一致
@@ -53,9 +54,35 @@ router.post('/login', function(req, res) {
 	});
 });
 
+router.post('/publish', function(req, res) {
+	var currentUser = req.session.user;
+	var newBlog = new Blog(currentUser.name,req.body.content)
+	newBlog.save(function(err){	
+		if (!err){
+			res.json({returnCode:'0',returnInfo:'发表成功'});
+		}else{
+			res.json({returnCode:'-1',returnInfo:'发表失败'});
+		}	
+	})
+});
+
+router.get('/blogList', function(req, res) {
+	if (!req.session.user) {
+		res.json({returnCode:'-1',returnInfo:"未登录"});
+	}else{
+		Blog.get(req.session.user.name, function(err, blogList) {
+			if (!err){
+				res.json({returnCode:'0',returnInfo:blogList});
+			}else{
+				res.json({returnCode:'-1',returnInfo:err});
+			}
+		})
+	}
+});
+
 router.get('/userInfo', function(req, res) {
-	if (req.session.user) {
-		res.json({returnCode:'1',returnInfo:"未登录"});
+	if (!req.session.user) {
+		res.json({returnCode:'-1',returnInfo:"未登录"});
 	}else{
 		res.json({returnCode:'0',returnInfo:{name:req.session.user.name}});
 	}
